@@ -1,13 +1,12 @@
+import argparse
+
 import click
 import owncloud
 from owncloud import Client
 
 
-@click.command()
-@click.option("--url", type=str, required=True, help="OwnCloud Instance to use.")
-@click.option("--username", type=str, required=True, help="Username to use.")
-@click.option("--folder", type=str, required=True, help="Folder of which the content will be shared.")
-def oc_share(url, username, folder):
+def oc_share(url: str, username: str, folder: str):
+    # could be replaced by getpass()
     password = click.termui.prompt(f"Password for {username}", hide_input=True)
     oc = owncloud.Client(url)
     oc.login(username, password)
@@ -22,4 +21,10 @@ def share_all_in_folder(oc: Client, folder: str):
 
 
 if __name__ == '__main__':
-    oc_share()
+    parser = argparse.ArgumentParser(description="Share a OwnCloud directory")
+    parser.add_argument("--url", dest="url", required=True, help="OwnCloud Instance to use.")
+    parser.add_argument("--username", dest="username", required=True, help="Username to use.")
+    parser.add_argument("--folder", dest="folder", required=True, help="Folder of which the content will be shared.")
+
+    args = parser.parse_args()
+    oc_share(args.url, args.username, args.folder)
