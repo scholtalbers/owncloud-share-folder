@@ -5,8 +5,8 @@ A quick script to generate public links for any given OwnCloud folder.
 ## Quick Start
 
 ```
-pip install click pyocclient
-python oc_share.py --url <owncloud instance> --username <username> --folder </a/owncloud/folder>
+pip install typer pyocclient
+python oc_share.py <owncloud instance> <username> </a/owncloud/folder>
 
 # output:
 /a/owncloud/folder/file1.txt <owncloud instance>/index.php/s/XXXX
