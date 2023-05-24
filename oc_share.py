@@ -1,14 +1,15 @@
-import click
 import owncloud
+import typer
 from owncloud import Client
+from rich.progress import track
 
 
-@click.command()
-@click.option("--url", type=str, required=True, help="OwnCloud Instance to use.")
-@click.option("--username", type=str, required=True, help="Username to use.")
-@click.option("--folder", type=str, required=True, help="Folder of which the content will be shared.")
-def oc_share(url: str, username: str, folder: str):
-    password = click.termui.prompt(f"Password for {username}", hide_input=True)
+def oc_share(
+        url: str,
+        username: str,
+        folder: str,
+        password: str = typer.Option(..., prompt=True, hide_input=True)
+):
     oc = owncloud.Client(url)
     oc.login(username, password)
     share_all_in_folder(oc, folder)
@@ -16,10 +17,10 @@ def oc_share(url: str, username: str, folder: str):
 
 def share_all_in_folder(oc: Client, folder: str):
     """Share all files in a given folder"""
-    for item in oc.list(folder):
+    for item in track(oc.list(folder), description="Creating links..."):
         link_info = oc.share_file_with_link(item)
         print(f"{link_info.get_path()}: {link_info.get_link()}")
 
 
 if __name__ == '__main__':
-    oc_share()
+    typer.run(oc_share)
