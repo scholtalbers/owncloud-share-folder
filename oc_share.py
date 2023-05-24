@@ -7,7 +7,7 @@ from owncloud import Client
 @click.option("--url", type=str, required=True, help="OwnCloud Instance to use.")
 @click.option("--username", type=str, required=True, help="Username to use.")
 @click.option("--folder", type=str, required=True, help="Folder of which the content will be shared.")
-def oc_share(url, username, folder):
+def oc_share(url: str, username: str, folder: str):
     password = click.termui.prompt(f"Password for {username}", hide_input=True)
     oc = owncloud.Client(url)
     oc.login(username, password)
