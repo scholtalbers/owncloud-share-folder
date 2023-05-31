@@ -5,11 +5,13 @@ from rich.progress import track
 
 
 def oc_share(
-        url: str,
-        username: str,
-        folder: str,
-        password: str = typer.Option(..., prompt=True, hide_input=True)
+        url: str = typer.Argument(..., help="OwnCloud instance url."),
+        username: str = typer.Argument(..., help="OwnCloud username to connect as."),
+        folder: str = typer.Argument(..., help="OwnCloud folder name, like '/ToBeShared'."),
+        password: str = typer.Option(..., prompt=True, hide_input=True,
+                                     help="OwnCloud password, leave empty to get a prompt.")
 ):
+    """This will generate public links for all the content in the given OwnCloud resource."""
     oc = owncloud.Client(url)
     oc.login(username, password)
     share_all_in_folder(oc, folder)
@@ -22,5 +24,9 @@ def share_all_in_folder(oc: Client, folder: str):
         print(f"{link_info.get_path()}: {link_info.get_link()}")
 
 
-if __name__ == '__main__':
+def main():
     typer.run(oc_share)
+
+
+if __name__ == '__main__':
+    main()

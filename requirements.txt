@@ -1,0 +1,3 @@
+typer==0.9.0
+pyocclient==0.6
+rich==13.3.5
